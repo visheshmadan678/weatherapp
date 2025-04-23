@@ -1,5 +1,5 @@
 pipeline {
-    agent any  // or use a specific label that has Docker installed
+    agent any
 
     environment {
         IMAGE_NAME = 'weather-dashboard'
