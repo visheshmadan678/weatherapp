@@ -3,7 +3,8 @@ pipeline {
 
     environment {
         IMAGE_NAME = 'weather-dashboard'
-        DOCKER_REGISTRY = 'visheshmadan/weather-dashboard'
+        TAG = 'latest'
+        DOCKERHUB_REPO = 'your-dockerhub-username/weather-dashboard' // Replace with your actual repo
     }
 
     stages {
@@ -13,51 +14,47 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Install & Lint') {
             steps {
                 sh 'npm ci'
-            }
-        }
-
-        stage('Lint') {
-            steps {
                 sh 'npm run lint'
             }
         }
 
-        stage('Build') {
+        stage('Build Project') {
             steps {
                 sh 'npm run build'
             }
         }
 
-        stage('Docker Build') {
+        stage('Build Docker Image') {
             steps {
-                script {
-                    docker.build("${IMAGE_NAME}")
-                }
+                sh "docker build -t ${IMAGE_NAME}:${TAG} ."
             }
         }
 
-        stage('Docker Push') {
+        stage('Login and Push to Docker Hub') {
             steps {
-                withCredentials([string(credentialsId: 'dockerhub-token', variable: 'DOCKERHUB_TOKEN')]) {
-                    script {
-                        sh "echo $DOCKERHUB_TOKEN | docker login -u your-dockerhub-username --password-stdin"
-                        sh "docker tag ${IMAGE_NAME} ${DOCKER_REGISTRY}"
-                        sh "docker push ${DOCKER_REGISTRY}"
-                    }
+                withCredentials([usernamePassword(credentialsId: 'docker-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh """
+                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                        docker tag ${IMAGE_NAME}:${TAG} ${DOCKERHUB_REPO}:${TAG}
+                        docker push ${DOCKERHUB_REPO}:${TAG}
+                    """
                 }
             }
         }
     }
 
     post {
+        always {
+            echo 'Pipeline completed.'
+        }
         success {
-            echo 'Pipeline completed successfully!'
+            echo 'Image pushed to Docker Hub successfully!'
         }
         failure {
-            echo 'Pipeline failed.'
+            echo 'Build or push failed.'
         }
     }
 }
