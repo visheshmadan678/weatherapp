@@ -38,12 +38,15 @@ pipeline {
         }
 
         stage('Build Docker Image') {
+            agent any // run on Jenkins host
             steps {
+                sh 'docker -v' // (optional) debug
                 sh "docker build -t ${IMAGE_NAME}:${TAG} ."
             }
         }
 
         stage('Login and Push to Docker Hub') {
+            agent any // run on Jenkins host
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     sh """
