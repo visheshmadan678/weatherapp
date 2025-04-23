@@ -4,7 +4,7 @@ pipeline {
     environment {
         IMAGE_NAME = 'weather-dashboard'
         TAG = 'latest'
-        DOCKERHUB_REPO = 'your-dockerhub-username/weather-dashboard' // Replace with your actual repo
+        DOCKERHUB_REPO = 'visheshmadan/weather-dashboard'
     }
 
     stages {
