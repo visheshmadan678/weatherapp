@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'node:23-alpine' 
-            args '-v /var/run/docker.sock:/var/run/docker.sock'
-        }
-    }
+    agent any  // or use a specific label that has Docker installed
 
     environment {
         IMAGE_NAME = 'weather-dashboard'
@@ -20,6 +15,11 @@ pipeline {
         }
 
         stage('Install & Lint') {
+            agent {
+                docker {
+                    image 'node:23'
+                }
+            }
             steps {
                 sh 'npm ci'
                 sh 'npm run lint'
@@ -27,6 +27,11 @@ pipeline {
         }
 
         stage('Build Project') {
+            agent {
+                docker {
+                    image 'node:23'
+                }
+            }
             steps {
                 sh 'npm run build'
             }
