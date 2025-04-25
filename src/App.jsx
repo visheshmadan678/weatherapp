@@ -68,7 +68,8 @@ function App() {
     <div className="min-h-screen py-12 px-4 bg-gradient-to-br from-slate-900 to-slate-800">
       <div className="max-w-7xl mx-auto fade-in">
         <h1 className="text-6xl font-bold text-center mb-2 gradient-text">
-          Weather Dashboard
+          {/*Weather Dashboard*/}
+          Mera loda lele
         </h1>
         <p className="text-center text-gray-400 text-lg mb-12">
           Get real-time weather updates for any city worldwide
