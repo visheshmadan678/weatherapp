@@ -45,6 +45,13 @@ pipeline {
             }
         }
 
+        stage('Deploy with Docker Compose') {
+            agent any
+            steps {
+                sh 'docker-compose down && docker-compose up -d'
+            }
+        }
+        
         stage('Login and Push to Docker Hub') {
             agent any // run on Jenkins host
             steps {
