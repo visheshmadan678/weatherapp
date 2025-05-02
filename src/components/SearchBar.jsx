@@ -21,7 +21,7 @@ function SearchBar({ onSearch }) {
               type="text"
               value={city}
               onChange={(e) => setCity(e.target.value)}
-              placeholder="Search for a project"
+              placeholder="Only Search is changed here"
               className="w-full px-8 py-6 text-lg text-white bg-transparent placeholder-gray-400 search-input focus:outline-none"
             />
             <FaLocationArrow className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 cursor-pointer hover:text-blue-400 transition-colors" />
